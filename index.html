@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- EDIT: tab title, description, share image -->
+<title>eternussxx | Links-in-Bio</title>
+<meta name="description" content="why are you here">
+<meta property="og:image" content="">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ===== YOUR LOOK: two glow colours run the whole page ===== */
+  :root {
+    --bg:      #07050f;
+    --glow-1:  #ff2e93;   /* main neon */
+    --glow-2:  #36d6ff;   /* second neon */
+    --text:    #ffffff;
+    --muted:   #a99fc4;
+    --radius:  20px;
+    --font: "Sora", "Trebuchet MS", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { height: 100%; }
+  body {
+    margin: 0; min-height: 100%; font-family: var(--font); color: var(--text); background: var(--bg);
+    padding: calc(env(safe-area-inset-top, 0px) + 28px) 18px calc(env(safe-area-inset-bottom, 0px) + 40px);
+    overflow-x: hidden;
+  }
+
+  /* BACKGROUND (GRAPHIC SLOT #1): replace with url("bg.jpg") center/cover fixed if you want an image */
+.bg { position: fixed; inset: 0; z-index: -1;
+      background: linear-gradient(rgba(7,5,15,.55), rgba(7,5,15,.75)),
+                  url("bg-removebg.png") center/cover no-repeat; }
+
+  main { max-width: 440px; margin: 0 auto; text-align: center; }
+
+  /* ===== HERO PHOTO (GRAPHIC SLOT #2) =====
+     Best result: a PNG with a TRANSPARENT background (cut-out of you).
+     The head/shoulders pop out of the frame and tilt in 3D when you move the mouse / tilt your phone.
+     A normal photo works too, it just stays inside the frame. */
+  .stage { perspective: 900px; margin: 10px auto 0; width: 300px; height: 340px; position: relative; }
+  .tilt { position: absolute; inset: 0; transform-style: preserve-3d; transition: transform .12s ease-out; }
+  .frame {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 250px; border-radius: 32px;
+    background: linear-gradient(145deg, var(--glow-1), var(--glow-2));
+    box-shadow: 0 0 40px color-mix(in srgb, var(--glow-1) 70%, transparent), 0 0 110px color-mix(in srgb, var(--glow-2) 45%, transparent);
+    transform: translateZ(0);
+  }
+  .frame::after { content: ""; position: absolute; inset: 3px; border-radius: 29px; background: #130d26; }
+  .name-ghost { position: absolute; left: 50%; bottom: 120px; z-index: 1; width: max-content; text-align: center;
+                font-size: min(3.2rem, 12vw); /* EDIT: size of the faint name behind you */
+                font-weight: 600; line-height: 1; letter-spacing: 0; color: rgba(252, 252, 252, 0.07);
+                transform: translateX(-50%) translateZ(30px); pointer-events: none; white-space: nowrap; }
+  .photo { position: absolute; left: 50%; bottom: 0; z-index: 2; width: 300px; height: 340px; object-fit: contain; object-position: bottom;
+           transform: translateX(-50%) translateZ(80px); filter: drop-shadow(0 18px 24px rgba(0,0,0,.6)) drop-shadow(0 0 18px color-mix(in srgb, var(--glow-1) 60%, transparent)); }
+  /* little floating sparks for depth (purely decorative, delete if you don't like them) */
+  .spark { position: absolute; width: 10px; height: 10px; border-radius: 50%; background: var(--glow-2); box-shadow: 0 0 16px 4px var(--glow-2); z-index: 3; }
+  .spark.a { left: 35px; top: 250px; transform: translateZ(120px); }
+  .spark.b { right: 10px; top: 130px; background: var(--glow-1); box-shadow: 0 0 16px 4px var(--glow-1); transform: translateZ(40px); }
+
+  /* NAME: glowing neon text */
+  h1 { margin: 22px 0 4px; font-size: 2.4rem; font-weight: 800; letter-spacing: -.02em;
+       text-shadow: 0 0 8px rgba(255,255,255,.6), 0 0 24px var(--glow-1), 0 0 52px var(--glow-1); }
+  .bio { margin: 0; color: var(--muted); font-style: italic; font-size: .9rem; line-height: 1.4;}
+
+/* LIVE / OFFLINE pill: switches automatically (see script) */
+.live { display: inline-block; margin-top: 14px; padding: 7px 16px; border-radius: 999px; font-weight: 700; font-size: .9rem; text-decoration: none;
+        color: var(--muted); background: rgba(255,255,255,.08); border: 1.5px solid rgba(255,255,255,.18); }
+.live.on { color: #fff; background: var(--glow-1); border-color: transparent; box-shadow: 0 0 22px var(--glow-1); animation: beat 1.4s infinite; }
+@keyframes beat { 50% { box-shadow: 0 0 40px var(--glow-1); } }
+
+  /* SOCIAL ICON ROW */
+  .socials { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin: 26px 0 8px; padding: 0; list-style: none; }
+  .socials a { width: 50px; height: 50px; display: grid; place-items: center; border-radius: 50%; color: #fff; font-weight: 800; text-decoration: none;
+               background: rgba(255,255,255,.06); border: 1.5px solid var(--glow-2); box-shadow: 0 0 14px color-mix(in srgb, var(--glow-2) 55%, transparent), inset 0 0 12px color-mix(in srgb, var(--glow-2) 25%, transparent);
+               transition: transform .18s, box-shadow .18s; }
+  .socials a:hover { transform: translateY(-4px) scale(1.08); box-shadow: 0 0 28px var(--glow-2), inset 0 0 16px var(--glow-2); }
+  .socials img { width: 26px; height: 26px; object-fit: contain; }
+
+  /* LINK BUTTONS: glowing gradient border, brighter on hover */
+  .links { display: grid; gap: 14px; margin: 26px 0 0; padding: 0; list-style: none; }
+  .link { position: relative; display: flex; align-items: center; justify-content: center; gap: 12px; min-height: 62px; padding: 14px 20px;
+          border-radius: var(--radius); color: #fff; text-decoration: none; font-weight: 700; font-size: 1.08rem;
+          background: linear-gradient(#130d26, #130d26) padding-box, linear-gradient(120deg, var(--glow-1), var(--glow-2)) border-box;
+          border: 2px solid transparent; box-shadow: 0 0 18px color-mix(in srgb, var(--glow-1) 45%, transparent);
+          transition: transform .18s, box-shadow .18s; }
+  .link:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 0 34px var(--glow-1), 0 0 70px color-mix(in srgb, var(--glow-2) 50%, transparent); }
+  .link .thumb { width: 34px; height: 34px; border-radius: 10px; object-fit: cover; }  /* GRAPHIC SLOT #3: per-button icon/thumbnail */
+  .link.main { font-size: 1.2rem; min-height: 70px; }                                  /* first button is bigger */
+
+  .mail { display: inline-block; margin-top: 32px; color: var(--muted); text-decoration: none; font-style: italic; font-size: .85rem; color: 
+  var(--muted); }
+  a:focus-visible { outline: 3px solid var(--glow-2); outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } .tilt { transform: none !important; } }
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<main>
+  <div class="stage" id="stage">
+    <div class="tilt" id="tilt">
+      <div class="frame"></div>
+      <div class="name-ghost">ETERNUSSXX</div> <!-- EDIT: big faint text behind you (or delete the line) -->
+      <!-- GRAPHIC SLOT #2: your photo. Replace src="" (use a transparent PNG for the pop-out effect) -->
+      <img class="photo" src="image-removebg.png" alt="eternussxx">
+      <span class="spark a"></span><span class="spark b"></span>
+    </div>
+  </div>
+
+  <h1>ETERNUSSXX</h1>
+  <p class="bio">I got itchy balls ●●●</p>
+  <a class="live" id="live" href="#" target="_blank" rel="noopener">● OFFLINE</a>
+
+  <ul class="socials" id="socials"></ul>
+  <ul class="links" id="links"></ul>
+
+  <a class="mail" href="mailto:eternussbusiness@gmail.com">eternussbusiness@gmail.com</a> <!-- EDIT: business email -->
+</main>
+
+<script>
+/* ===================== EDIT THIS PART ===================== */
+const TWITCH_CHANNEL = "eternussxx";   // the LIVE NOW button shows automatically when this channel is live
+
+/* Icon row. url "#" = fill in later. icon: path to a logo image, "" = shows the letter */
+const SOCIALS = [
+ // { name: "Twitch",    letter: "T", url: "twitch.tv/eternussxx", icon: "twitch.png" },
+  { name: "Kick",      letter: "K", url: "#", icon: "kick.png" },
+  //{ name: "YouTube",   letter: "Y", url: "https://www.youtube.com/@eternussxx", icon: "yt.png" },
+  { name: "TikTok",    letter: "♪", url: "https://www.tiktok.com/@eternussxx", icon: "tiktok.png" },
+  { name: "Instagram", letter: "I", url: "https://www.instagram.com/eternussxx/", icon: "instagram.png" },
+  { name: "X",         letter: "X", url: "#", icon: "x.png" },
+ // { name: "Discord",   letter: "D", url: "https://discord.gg/6kTVY9B5HR", icon: "discord.png" },
+];
+
+/* Big buttons, top to bottom. First one is styled larger. thumb: small image or "" */
+const LINKS = [
+  { label: "Watch me live", url: "https://www.twitch.tv/eternussxx", thumb: "TwitchGLITCH-4x.gif" },
+  { label: "YouTube",       url: "https://www.youtube.com/@eternussxx", thumb: "youtube-4x.gif" },
+  { label: "Join the Discord", url: "https://discord.gg/6kTVY9B5HR", thumb: "discord-4x.gif" },
+  // { label: "Merch", url: "#", thumb: "" },   // copy a line to add more
+];
+/* ========================================================== */
+
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* LIVE NOW button: checks Twitch automatically */
+const live = document.getElementById("live");
+live.href = "https://twitch.tv/" + TWITCH_CHANNEL;
+
+function setLive(isLive) {
+  live.classList.toggle("on", isLive);
+  live.textContent = isLive ? "● LIVE" : "● OFFLINE";   // EDIT: change the wording if you like
+}
+
+async function checkLive() {
+  try {
+    const r = await fetch("https://decapi.me/twitch/uptime/" + TWITCH_CHANNEL);
+    const t = (await r.text()).toLowerCase();
+    setLive(r.ok && !t.includes("offline") && !t.includes("error") && !t.includes("not found"));
+  } catch (e) {
+    setLive(false);
+  }
+}
+checkLive();
+setInterval(checkLive, 60000);   // re-checks every minute while the page is open
+
+document.getElementById("socials").innerHTML = SOCIALS.map(s =>
+  `<li><a href="${esc(s.url)}" target="_blank" rel="noopener" aria-label="${esc(s.name)}">${s.icon ? `<img src="${esc(s.icon)}" alt="">` : esc(s.letter)}</a></li>`).join("");
+
+document.getElementById("links").innerHTML = LINKS.map((l, i) =>
+  `<li><a class="link${i === 0 ? " main" : ""}" href="${esc(l.url)}" target="_blank" rel="noopener">${l.thumb ? `<img class="thumb" src="${esc(l.thumb)}" alt="">` : ""}${esc(l.label)}</a></li>`).join("");
+
+/* 3D tilt: mouse on desktop, device tilt on phone (iOS asks permission on first tap) */
+const stage = document.getElementById("stage"), tilt = document.getElementById("tilt");
+const set = (x, y) => tilt.style.transform = `rotateY(${x * 16}deg) rotateX(${-y * 12}deg)`;
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+if (!reduce) {
+  window.addEventListener("pointermove", e => set(e.clientX / innerWidth - .5, e.clientY / innerHeight - .5));
+  window.addEventListener("pointerleave", () => set(0, 0));
+  const orient = e => { if (e.gamma != null) set(Math.max(-.5, Math.min(.5, e.gamma / 45)), Math.max(-.5, Math.min(.5, (e.beta - 45) / 60))); };
+  if (window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission === "function") {
+    stage.addEventListener("click", () => DeviceOrientationEvent.requestPermission().then(r => r === "granted" && addEventListener("deviceorientation", orient)).catch(() => {}), { once: true });
+  } else addEventListener("deviceorientation", orient);
+}
+
+const bg = document.querySelector(".bg");
+
+window.addEventListener("scroll", () => {
+  bg.style.transform = `translateY(${scrollY * .1}px)`;  /* parallax effect */
+})
+</script>
+</body>
+</html>
