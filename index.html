@@ -187,9 +187,22 @@ if (!reduce) {
 
 const bg = document.querySelector(".bg");
 
+let targetY = 0;
+let currentY = 0;
+
 window.addEventListener("scroll", () => {
-  bg.style.transform = `translateY(${scrollY * .1}px)`;  /* parallax effect */
-})
+    targetY = window.scrollY * 0.25;
+}, { passive: true });
+
+function animateBackground() {
+    currentY += (targetY - currentY) * 0.08;
+
+    bg.style.transform = `translate3d(0, ${currentY}px, 0)`;
+
+    requestAnimationFrame(animateBackground);
+}
+
+animateBackground();
 </script>
 </body>
 </html>
